@@ -1,0 +1,27 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: preflight
+spec:
+  homepage: https://github.com/triliovault-k8s-issues/triliovault-k8s-issues/blob/master/tools/preflight/preflight.sh
+  shortDescription: TVK application preflight check for k8s cluster
+  version: v2.1.0
+  description: |
+    preflight is a standalone helper script which checks if all the pre-requisites are met before installing Triliovault
+    for Kubernetes application in a Kubernetes cluster.
+  caveats: |
+    kubectl and helm client utilities should be installed in order to preflight.
+  platforms:
+    - selector:
+        matchExpressions:
+          - key: os
+            operator: In
+            values:
+              - darwin
+              - linux
+      uri: https://raw.githubusercontent.com/triliovault-k8s-issues/triliovault-k8s-issues/TK-1973/tools/preflight/preflight.tar.gz
+      sha256: 68757b73aa3df066399ba11f87ef1d766786a9823672b9ef505aaf105df4a1ea
+      bin: preflight
+      files:
+        - from: preflight/preflight
+          to: .
