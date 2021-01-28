@@ -3,14 +3,9 @@ kind: Plugin
 metadata:
   name: preflight
 spec:
-  homepage: https://github.com/triliovault-k8s-issues/triliovault-k8s-issues/blob/master/tools/preflight/preflight.sh
+  homepage: https://github.com/triliovault-k8s-issues/triliovault-k8s-issues/blob/master/tools/preflight/README.md
   shortDescription: TVK application preflight check for k8s cluster
   version: v2.1.0
-  description: |
-    preflight is a standalone helper script which checks if all the pre-requisites are met before installing Triliovault
-    for Kubernetes application in a Kubernetes cluster.
-  caveats: |
-    kubectl and helm client utilities should be installed in order to preflight.
   platforms:
     - selector:
         matchExpressions:
@@ -25,3 +20,18 @@ spec:
       files:
         - from: preflight/preflight
           to: .
+
+  description: |
+    preflight is a kubectl plugin which checks whether all the pre-requisites are met before installing Triliovault
+    for Kubernetes(TVK) application in a Kubernetes cluster.
+
+    > Check available flags for preflight plugin with :-
+    kubectl preflight --help
+
+    --storageclass - Name of storage class being used in k8s cluster (Needed)
+    --snapshotclass - Name of volume snapshot class being used in k8s cluster (Needed)
+    --kubeconfig - Kubeconfig path, if not given default is used by kubectl (Optional)
+
+    > Usage :-
+
+    kubectl preflight --storageclass my-hostpath-sc --snapshotclass default-snapclass --kubeconfig /home/usr/kubeconfig

@@ -1,6 +1,6 @@
 # Kubernetes Triliovault Preflight Checks
 
-**preflight.sh** is a standalone helper script which checks if all the pre-requisites are
+**preflight** is a standalone helper script which checks if all the pre-requisites are
 met before installing Triliovault for Kubernetes application in a Kubernetes cluster.
 
 ## Checks Performed during Preflight
