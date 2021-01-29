@@ -1,0 +1,36 @@
+apiVersion: krew.googlecontainertools.github.com/v1alpha2
+kind: Plugin
+metadata:
+  name: preflight
+spec:
+  homepage: https://github.com/msurudwad/kubectl-plugins/blob/main/tools/preflight/README.md
+  shortDescription: TVK application preflight check for k8s cluster
+  version: {{ .TagName }}
+  platforms:
+  - selector:
+      matchExpressions:
+      - key: os
+        operator: In
+        values:
+        - darwin
+        - linux
+    {{addURIAndSha "https://github.com/msurudwad/kubectl-plugins/archive/{{ .TagName }}.tar.gz" .TagName }}
+    bin: preflight
+    files:
+      - from: preflight/preflight
+        to: .
+
+  description: |
+    preflight is a kubectl plugin which checks whether all the pre-requisites are met before installing Triliovault
+    for Kubernetes(TVK) application in a Kubernetes cluster.
+
+    > Check available flags for preflight plugin with :-
+    kubectl preflight --help
+
+    --storageclass - Name of storage class being used in k8s cluster (Needed)
+    --snapshotclass - Name of volume snapshot class being used in k8s cluster (Needed)
+    --kubeconfig - Kubeconfig path, if not given default is used by kubectl (Optional)
+
+    > Usage :-
+
+    kubectl preflight --storageclass my-hostpath-sc --snapshotclass default-snapclass --kubeconfig /home/usr/kubeconfig
