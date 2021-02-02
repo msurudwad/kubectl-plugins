@@ -1,0 +1,16 @@
+apiVersion: triliovault.trilio.io/v1
+kind: TrilioVaultManager
+metadata:
+  labels:
+    triliovault: k8s
+  name: tvk
+spec:
+  trilioVaultAppVersion: v2.0.1
+  helmVersion:
+    version: v3
+    tillerNamespace: kube-system
+  applicationScope: Namespaced
+  restoreNamespaces: ["kube-system", "default", "ms", "ms-res", "ms-test"]
+  resources:
+    requests:
+      memory: 400Mi

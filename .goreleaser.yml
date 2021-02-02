@@ -52,7 +52,7 @@ archives:
     - goos: windows
       format: zip
   files:
-    - preflight.tar.gz
+    - run.sh
 checksum:
   name_template: "checksums.txt"
   algorithm: sha256
