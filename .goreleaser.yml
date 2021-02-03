@@ -17,7 +17,6 @@
 before:
   hooks:
     - go mod download
-    - ./run.sh
 builds:
 - id: hello
   main: ./cmd/
@@ -30,10 +29,6 @@ builds:
     - windows
   goarch:
     - amd64
-    - arm
-    - arm64
-    - ppc64le
-  goarm: [6, 7]
 archives:
 - id: hello-archive
   name_template: |-
@@ -45,9 +40,6 @@ archives:
     {{- end -}}
   builds:
     - hello
-  replacements:
-    386: i386
-    amd64: x86_64
   format_overrides:
     - goos: windows
       format: zip
