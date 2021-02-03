@@ -213,9 +213,11 @@ check_storage_snapshot_class() {
 		echo -e "${RED} ${CROSS} Volume snapshot class \"${SNAPSHOT_CLASS}\" not found${NC}\n"
 		exit_status=1
 	fi
+	# shellcheck disable=SC2143
 	if [[ $(kubectl get apiservices | grep "v1beta1.snapshot.storage.k8s.io") ]]; then
 		echo -e "${GREEN} ${CHECK} Snapshot api is in beta. No need to have default class annotation on volume snapshot class${NC}\n"
 	else
+		# shellcheck disable=SC2143
 		if [[ $(kubectl get volumesnapshotclass -o yaml | grep "is-default-class: \"true\"") ]]; then
 			echo -e "${GREEN} ${CHECK} Snapshot api is in alpha. Found a snapshot class marked as default${NC}\n"
 		else
@@ -326,6 +328,7 @@ EOF
 	set +o errexit
 	kubectl wait --for=condition=ready --timeout=2m pod/dnsutils &> /dev/null
 	kubectl exec -it dnsutils -- nslookup kubernetes.default &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN} ${CHECK} Able to resolve DNS \"kubernetes.default\" service inside pods${NC}\n"
 	else
@@ -379,6 +382,7 @@ spec:
 EOF
 
 	kubectl wait --for=condition=ready --timeout=2m pod/source-pod &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN} ${CHECK} Created source pod and pvc${NC}\n"
 	else
@@ -411,6 +415,7 @@ spec:
     name: ${SOURCE_PVC}
 EOF
 	fi
+	# shellcheck disable=SC2181
 	if [[ $? -ne 0 ]]; then
 		echo -e "${RED_BOLD} ${CROSS} Error creating volume snapshot from source pvc${NC}\n"
 		return ${err_status}
@@ -471,6 +476,7 @@ spec:
 EOF
 
 	kubectl wait --for=condition=ready --timeout=2m pod/"${RESTORE_POD}" &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN} ${CHECK} Created restore pod from volume snapshot${NC}\n"
 	else
@@ -479,6 +485,7 @@ EOF
 	fi
 
 	kubectl exec -it "${RESTORE_POD}" -- ls /demo/data/sample-file.txt &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN} ${CHECK} Restored pod has expected data${NC}\n"
 	else
@@ -487,6 +494,7 @@ EOF
 	fi
 
 	kubectl delete --ignore-not-found=true pod/"${SOURCE_POD}" &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN} ${CHECK} Deleted source pod${NC}\n"
 	else
@@ -519,6 +527,7 @@ spec:
     name: ${SOURCE_PVC}
 EOF
 	fi
+	# shellcheck disable=SC2181
 	if [[ $? -ne 0 ]]; then
 		echo -e "${RED_BOLD} ${CROSS} Error creating volume snapshot from unused source pvc${NC}\n"
 		return ${err_status}
@@ -580,6 +589,7 @@ spec:
 EOF
 
 	kubectl wait --for=condition=ready --timeout=2m pod/"${UNUSED_RESTORE_POD}" &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN} ${CHECK} Created restore pod from volume snapshot of unused pv${NC}\n"
 	else
@@ -588,6 +598,7 @@ EOF
 	fi
 
 	kubectl exec -it "${UNUSED_RESTORE_POD}" -- ls /demo/data/sample-file.txt &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN} ${CHECK} Restored pod from volume snapshot of unused pv has expected data${NC}\n"
 	else
@@ -606,6 +617,7 @@ cleanup(){
 
 	kubectl delete --ignore-not-found=true pod/"${SOURCE_POD}" pod/"${RESTORE_POD}" pod/"${UNUSED_RESTORE_POD}" pvc/"${SOURCE_PVC}" \
 	pvc/"${RESTORE_PVC}" pvc/"${UNUSED_RESTORE_PVC}" volumesnapshot/"${VOLUME_SNAP_SRC}" volumesnapshot/"${UNUSED_VOLUME_SNAP_SRC}"  &> /dev/null
+	# shellcheck disable=SC2181
 	if [[ $? -eq 0 ]]; then
 		echo -e "\n${GREEN} ${CHECK} Cleaned up all the resources${NC}\n"
 	else

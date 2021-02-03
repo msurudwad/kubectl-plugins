@@ -6,34 +6,6 @@ set -euo pipefail
 
 gopath="$(go env GOPATH)"
 
-#
-#if ! [[ -x "$gopath/bin/golangci-lint" ]]; then
-#  echo >&2 'Installing golangci-lint'
-#  curl --silent --fail --location \
-#    https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b "$gopath/bin" v1.34.1
-#fi
-#
-## configured by .golangci.yml
-#"$gopath/bin/golangci-lint" run
-#
-#install_impi() {
-#  impi_dir="$(mktemp -d)"
-#  trap 'rm -rf -- ${impi_dir}' EXIT
-#
-#  cd "${impi_dir}"
-#  go mod init foo
-#  go get github.com/pavius/impi/cmd/impi@c1cbdcb
-#  cd -
-#}
-#
-## install impi that ensures import grouping is done consistently
-#if ! [[ -x "${gopath}/bin/impi" ]]; then
-#  echo >&2 'Installing impi'
-#  install_impi
-#fi
-#
-#"$gopath/bin/impi" --local sigs.k8s.io/krew --scheme stdThirdPartyLocal ./...
-
 install_shfmt() {
   shfmt_dir="$(mktemp -d)"
   trap 'rm -rf -- ${shfmt_dir}' EXIT
@@ -50,11 +22,17 @@ if ! [[ -x "${gopath}/bin/shfmt" ]]; then
   install_shfmt
 fi
 
-
-SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-shfmt_out="$($gopath/bin/shfmt -l -i=2 ${SCRIPTDIR})"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+shfmt_out="$("$gopath"/bin/shfmt -l -i=2 "${script_dir}")"
 if [[ -n "${shfmt_out}" ]]; then
-  echo >&2 "The following shell scripts need to be formatted, run: 'shfmt -w -i=2 ${SCRIPTDIR}'"
+  echo >&2 "The following shell scripts need to be formatted, run: 'shfmt -w -i=2 ${script_dir}'"
   echo >&2 "${shfmt_out}"
   exit 1
 fi
+
+# run shell lint
+SRC_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
+
+find "${SRC_ROOT}" -type f -name "*.sh" -not -path "*/vendor/*" -exec "shellcheck" {} +
+
+echo >&2 "No issues detected!"

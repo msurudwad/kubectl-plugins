@@ -1,9 +1,9 @@
 apiVersion: krew.googlecontainertools.github.com/v1alpha2
 kind: Plugin
 metadata:
-  name: preflight
+  name: tvk-preflight
 spec:
-  homepage: https://github.com/triliovault-k8s-issues/triliovault-k8s-issues/blob/master/tools/preflight/README.md
+  homepage: https://github.com/msurudwad/kubectl-plugins/blob/main/tools/preflight/README.md
   shortDescription: TVK application preflight check for k8s cluster
   version: v2.1.0
   platforms:
@@ -14,8 +14,8 @@ spec:
             values:
               - darwin
               - linux
-      uri: https://raw.githubusercontent.com/triliovault-k8s-issues/triliovault-k8s-issues/TK-1973/tools/preflight/preflight.tar.gz
-      sha256: 68757b73aa3df066399ba11f87ef1d766786a9823672b9ef505aaf105df4a1ea
+      uri: https://github.com/msurudwad/kubectl-plugins/releases/download/v0.1/preflight.tar.gz
+      sha256: 5324b73049082b263f23957cdab3e719b3f751958017ee73765edd4d396d23fe
       bin: preflight
       files:
         - from: preflight/preflight
