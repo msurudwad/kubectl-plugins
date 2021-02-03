@@ -33,14 +33,28 @@ install_helm_if_needed() {
     local -r HELM_VERSION="v3.5.1"
     curl -Lo /tmp/helm-linux-amd64.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz
     tar -xvf /tmp/helm-linux-amd64.tar.gz -C /tmp/
-    chmod +x /tmp/linux-amd64/helm && mv /tmp/linux-amd64/helm /usr/local/bin/
+    chmod +x /tmp/linux-amd64/helm && sudo mv /tmp/linux-amd64/helm /usr/local/bin/
     helm init --client-only
     helm version
     echo >&2 "installed helm"
-   fi
+  fi
 }
 
+install_krew_if_needed() {
+  if hash kubectl krew 2>/dev/null; then
+    echo >&2 "using kew from the host system and not reinstalling"
+  else
+    set -x
+    cd "$(mktemp -d)" &&
+      curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.tar.gz" &&
+      tar zxvf krew.tar.gz &&
+      KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_$(uname -m | sed -e 's/x86_64/amd64/' -e 's/arm.*$/arm/')" &&
+      "$KREW" install krew
+    sudo mv ~/.krew/bin/kubectl-krew /usr/local/bin/
+    kubectl krew
+  fi
+}
 
 install_kubectl_if_needed
-
 install_helm_if_needed
+install_krew_if_needed
