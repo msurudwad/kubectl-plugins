@@ -1,19 +1,3 @@
-# Copyright 2021 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# This is an example goreleaser.yaml file with some sane defaults.
-# Make sure to check the documentation at http://goreleaser.com
 before:
   hooks:
     - go mod download
@@ -29,6 +13,8 @@ builds:
     - windows
   goarch:
     - amd64
+  goarm: [6, 7]
+
 archives:
 - id: hello-archive
   name_template: |-
@@ -43,8 +29,35 @@ archives:
   format_overrides:
     - goos: windows
       format: zip
-  files:
-    - run.sh
+#  files:
+#    - ./run.sh
+#    - ./tools/preflight/*
+#    - ./build/preflight.tar.gz
+#    - ./build/preflight-sha256.txt
+#    - tvm.yaml
+
 checksum:
-  name_template: "checksums.txt"
+  name_template: "hello-checksums.txt"
   algorithm: sha256
+
+release:
+  # If set to true, will not auto-publish the release.
+  # Default is false.
+  draft: true
+
+  # If set to auto, will mark the release as not ready for production
+  # in case there is an indicator for this in the tag e.g. v1.0.0-rc1
+  # If set to true, will mark the release as not ready for production.
+  # Default is false.
+  prerelease: auto
+
+  # You can add extra pre-existing files to the release.
+  # The filename on the release will be the last part of the path (base). If
+  # another file with the same name exists, the latest one found will be used.
+  # Defaults to empty.
+  extra_files:
+    - glob: ./run.sh
+#    - glob: ./tools/preflight/*
+    - glob: ./build/preflight.tar.gz
+    - glob: ./build/preflight-sha256.txt
+    - glob: tvm.yaml

@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
 set -ex
+rm -rf build
+        mkdir build
+        cp -r ./tools/preflight ./build
+        cd ./build/
+        mv ./preflight/preflight.sh ./preflight/preflight
+        tar -cvzf preflight.tar.gz preflight/
 
-helm repo add k8s-triliovault-stable http://charts.k8strilio.net/trilio-stable/k8s-triliovault
-helm repo add k8s-operator-stable http://charts.k8strilio.net/trilio-stable/k8s-triliovault-operator
-
-helm install -n ms k8s-tv-operator k8s-operator-stable/k8s-triliovault-operator --version v0.2.6
-kubectl apply -n ms -f tvm.yaml
-
-kubectl get -n ms -f tvm.yaml -oyaml
-
+sha256sum preflight.tar.gz > preflight-sha256.txt
 set +ex

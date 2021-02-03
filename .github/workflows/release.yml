@@ -63,6 +63,10 @@ jobs:
           go mod tidy
           go test -v ./...
 
+      - name: Build TAR
+        run: |
+          ./run.sh
+
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2

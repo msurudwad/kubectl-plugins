@@ -1,4 +1,4 @@
-name: Kubernetes-sigs/krew CI
+name: Go implementation (CI)
 on:
   push:
     branches:
@@ -10,75 +10,36 @@ on:
       - '*'
 
 jobs:
-
-  build:
+  ci:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goVer: [1.14]
     steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Setup Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.15
+    - name: Ensure gofmt
+      run: test -z "$(gofmt -s -d .)"
+    - name: Ensure go.mod is already tidied
+      run: go mod tidy && git diff --no-patch --exit-code
+    - name: Run unit tests
+      run: go test ./...
 
-      - name: Set up Go 1.15
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.15
+#    - name: Build with Goreleaser
+#      uses: goreleaser/goreleaser-action@v1
+#      with:
+#        version: latest
+#        args: release --snapshot --skip-publish --rm-dist
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+    - name: Build TAR
+      run: |
+        ./run.sh
 
-      - name: Install dependencies
-        run: go mod download
-
-#      - name: Install gox
-#        run: hack/install-gox.sh
-
-      - name: Ensure go.mod is already tidied
-        run: go mod tidy && git diff --no-patch --exit-code
-
-      - name: Verify code patterns
-        run: hack/verify-code-patterns.sh
-
-      - name: Run Shell lint
-        run: hack/run-lint.sh
-
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.29
-
-#      - name: Run unit tests
-#        run: go test -short ./...
-
-      - name: Make binaries && verify plugins installation
-        run: hack/make-all.sh
-
-      - name: Ensure kubectl & helm installed
-        run: hack/ensure-kubectl-and-helm-installed.sh
-
-      - name: Verify installation
-        run: hack/verify-installation.sh
-
-#      - name: Run integration tests
-#        run: hack/run-integration-tests.sh
-
-      - name: Create a new release
-        if: contains(github.ref, 'tags')
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-#      - name: Upload binaries to the new release
-#        if: contains(github.ref, 'tags')
-#        uses: svenstaro/upload-release-action@v2
-#        with:
-#          repo_token: ${{ secrets.GITHUB_TOKEN }}
-#          file: out/krew.*
-#          tag: ${{ github.ref }}
-#          overwrite: true
-#          file_glob: true
+    - name: Run GoReleaser
+      uses: goreleaser/goreleaser-action@v2
+      with:
+        version: latest
+        args: release --rm-dist
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
