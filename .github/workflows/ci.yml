@@ -47,13 +47,16 @@ jobs:
 #        file: ./coverage.txt
 
     - name: Build Preflight Package
-      run: hack/make-release-artifacts.sh
+      run: hack/build-preflight-artifacts.sh
 
-    - name: Build with Goreleaser
+    - name: Build Log-Collector Packages
       uses: goreleaser/goreleaser-action@v2
       with:
         version: latest
         args: release --snapshot --skip-publish --rm-dist
+
+    - name: Generate Plugin Manifests for Local Testing
+      run: hack/generate-plugin-manifests.sh
 
     - name: Ensure kubectl, helm and krew installed
       run: hack/ensure-kubectl-helm-krew-installed.sh

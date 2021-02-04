@@ -3,15 +3,16 @@
 set -e -o pipefail
 
 SRC_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
-preflight_tar_archive=preflight.tar.gz
+preflight_tar_archive="preflight.tar.gz"
 
 echo >&2 "Creating ${preflight_tar_archive} archive."
 
-build_dir="./build"
+cd "$SRC_ROOT"
+build_dir="build"
 mkdir $build_dir
-cp -r ./tools/preflight $build_dir
+cp -r tools/preflight $build_dir
 cd $build_dir
-mv ./preflight/preflight.sh ./preflight/preflight
+mv preflight/preflight.sh preflight/preflight
 
 # consistent timestamps for files in build dir to ensure consistent checksums
 while IFS= read -r -d $'\0' f; do
@@ -32,10 +33,3 @@ fi
 
 "${checksum_cmd[@]}" ${preflight_tar_archive} >preflight-sha256.txt
 echo >&2 "Written sha256 of ${preflight_tar_archive} into preflight-sha256.txt successfully"
-
-echo >&2 "Creating Preflight yaml"
-cd "$SRC_ROOT"
-cp plugins/preflight.yaml $build_dir/preflight.yaml
-tar_checksum="$(cut -d' ' -f1 $build_dir/preflight-sha256.txt)"
-sed -i "s/.*sha256: .*/      sha256: ${tar_checksum}/g" $build_dir/preflight.yaml
-echo >&2 "Written out/preflight.yaml."

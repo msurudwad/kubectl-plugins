@@ -6,6 +6,8 @@ spec:
   homepage: https://github.com/msurudwad/kubectl-plugins/blob/main/tools/preflight/README.md
   shortDescription: TVK application preflight check for k8s cluster
   version: v2.1.0
+  caveats: |
+    Curl and Git neeed to be installed on system for Krew to work properly
   platforms:
     - selector:
         matchExpressions:
@@ -14,7 +16,7 @@ spec:
             values:
               - darwin
               - linux
-      uri: https://github.com/msurudwad/kubectl-plugins/releases/download/v0.1/preflight.tar.gz
+      uri: https://github.com/msurudwad/kubectl-plugins/releases/download/v2.1.0/preflight.tar.gz
       sha256: 5324b73049082b263f23957cdab3e719b3f751958017ee73765edd4d396d23fe
       bin: preflight
       files:

@@ -1,24 +1,27 @@
 apiVersion: krew.googlecontainertools.github.com/v1alpha2
 kind: Plugin
 metadata:
-  name: preflight
+  name: tvk-preflight
 spec:
   homepage: https://github.com/msurudwad/kubectl-plugins/blob/main/tools/preflight/README.md
   shortDescription: TVK application preflight check for k8s cluster
-  version: {{ .TagName }}
+  version: v2.1.0
+  caveats: |
+    Curl and Git neeed to be installed on system for Krew to work properly
   platforms:
-  - selector:
-      matchExpressions:
-      - key: os
-        operator: In
-        values:
-        - darwin
-        - linux
-    {{addURIAndSha "https://github.com/msurudwad/kubectl-plugins/archive/{{ .TagName }}.tar.gz" .TagName }}
-    bin: preflight
-    files:
-      - from: preflight/preflight
-        to: .
+    - selector:
+        matchExpressions:
+          - key: os
+            operator: In
+            values:
+              - darwin
+              - linux
+      uri: https://github.com/msurudwad/kubectl-plugins/releases/download/v2.1.0/preflight.tar.gz
+      sha256: PREFLIGHT_TAR_CHECKSUM
+      bin: preflight
+      files:
+        - from: preflight/preflight
+          to: .
 
   description: |
     preflight is a kubectl plugin which checks whether all the pre-requisites are met before installing Triliovault
