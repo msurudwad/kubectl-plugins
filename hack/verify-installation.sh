@@ -29,15 +29,9 @@ kubectl krew uninstall tvk-preflight
 
 build_dir="dist"
 
-# Copy and process plugins manifests
-git_describe="$(git describe --tags --always)"
-if [[ ! "${git_describe}" =~ v.* ]]; then
-  # if tag cannot be inferred (e.g. CI/CD), still provide a valid
-  # version field for plugin.yaml
-  git_describe="v0.0.0"
-fi
-
-git_version="${TAG_NAME:-$git_describe}"
+# get current git tag
+# shellcheck disable=SC1090
+source "$SRC_ROOT"/hack/get-git-tag.sh
 
 log_collector_manifest="${build_dir}/logCollector.yaml"
 if [[ ! -f "${log_collector_manifest}" ]]; then
@@ -45,6 +39,7 @@ if [[ ! -f "${log_collector_manifest}" ]]; then
   exit 1
 fi
 
+# shellcheck disable=SC2154
 log_collector_tar_archive="log-collector_${git_version}_linux_amd64.tar.gz"
 log_collector_archive_path="${build_dir}/${log_collector_tar_archive}"
 if [[ ! -f "${log_collector_archive_path}" ]]; then

@@ -2,17 +2,12 @@
 
 set -e -o pipefail
 
-# Copy and process plugins manifests
-git_describe="$(git describe --tags --always)"
-if [[ ! "${git_describe}" =~ v.* ]]; then
-  # if tag cannot be inferred (e.g. CI/CD), still provide a valid
-  # version field for plugin.yaml
-  git_describe="v0.0.0"
-fi
-
-git_version="${TAG_NAME:-$git_describe}"
-
 SRC_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
+
+# get current git tag
+# shellcheck disable=SC1090
+source "$SRC_ROOT"/hack/get-git-tag.sh
+
 build_dir="./build"
 
 echo >&2 "Creating Preflight plugin manifest yaml"
@@ -48,6 +43,7 @@ fi
 
 cp .krew/logCollector.yaml $build_dir/logCollector.yaml
 
+# shellcheck disable=SC2154
 log_collector_tar_archive="log-collector_${git_version}_linux_amd64.tar.gz"
 tar_checksum="$(eval "${checksum_cmd[@]}" "$build_dir/${log_collector_tar_archive}" | awk '{print $1;}')"
 sed -i "s/LOG_COLLECTOR_LINUX_TAR_CHECKSUM/${tar_checksum}/g" $build_dir/logCollector.yaml

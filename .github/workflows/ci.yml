@@ -58,7 +58,7 @@ jobs:
         args: release --snapshot --skip-publish --rm-dist
 
     - name: Generate Plugin Manifests for Local Testing
-      run: hack/generate-plugin-manifests.sh
+      run: hack/generate-test-plugin-manifests.sh
 
     - name: Ensure kubectl, helm and krew installed
       run: hack/ensure-kubectl-helm-krew-installed.sh
