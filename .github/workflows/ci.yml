@@ -1,6 +1,8 @@
 name: CI
 on:
   push:
+    paths-ignore:
+      - 'plugins/**'
     branches:
       - '*'
     tags:

@@ -34,6 +34,6 @@ spec:
     --snapshotclass - Name of volume snapshot class being used in k8s cluster (Needed)
     --kubeconfig - Kubeconfig path, if not given default is used by kubectl (Optional)
 
-    > Usage :-
+    > Usage :-  testing
 
     kubectl preflight --storageclass my-hostpath-sc --snapshotclass default-snapclass --kubeconfig /home/usr/kubeconfig
