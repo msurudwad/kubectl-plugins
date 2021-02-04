@@ -40,7 +40,7 @@ spec:
       bin: log-collector.exe
       files:
         - from: log-collector.exe
-           to: .
+          to: .
 
   description: |
     tvk-log-collector is a kubectl plugin which collects the information mainly yaml configuration and logs from k8s cluster for
