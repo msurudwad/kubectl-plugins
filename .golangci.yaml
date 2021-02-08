@@ -4,10 +4,10 @@ linters-settings:
     settings:
       printf:
         funcs:
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+        - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+        - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+        - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+        - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
   golint:
     min-confidence: 0 # default value
   gofmt:
@@ -27,9 +27,9 @@ linters-settings:
     packages:
       # logging is allowed only by logutils.Log, logrus
       # is allowed to use only in logutils package
-      - github.com/sirupsen/logrus
+    - github.com/sirupsen/logrus
     packages-with-error-messages:
-      github.com/sirupsen/logrus: "logging is allowed only by logutils.Log"
+      github.com/sirupsen/logrus: logging is allowed only by logutils.Log
   misspell:
     locale: US
   lll:
@@ -49,15 +49,15 @@ linters-settings:
     local-prefixes: github.com/golangci/golangci-lint
   gocritic:
     enabled-tags:
-      - diagnostic
-      - opinionated
-      - performance
-      - style
+    - diagnostic
+    - opinionated
+    - performance
+    - style
     disabled-checks:
-      - wrapperFunc
-      - ifElseChain
-      - octalLiteral
-      - regexpMust
+    - wrapperFunc
+    - ifElseChain
+    - octalLiteral
+    - regexpMust
     settings:
       captLocal:
         paramsOnly: true
@@ -69,32 +69,32 @@ linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
-    - deadcode
-    - dupl
-    - errcheck
-    - goconst
-    - gocritic
-    - gocyclo
-    - gofmt
-    - goimports
-    - golint
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - interfacer
-    - lll
-    - misspell
-    - nakedret
-    - scopelint
-    - staticcheck
-    - structcheck
-    - stylecheck
-    - typecheck
-    - unconvert
-    - unparam
-    - unused
-    - varcheck
+  - deadcode
+  - dupl
+  - errcheck
+  - goconst
+  - gocritic
+  - gocyclo
+  - gofmt
+  - goimports
+  - golint
+  - gosec
+  - gosimple
+  - govet
+  - ineffassign
+  - interfacer
+  - lll
+  - misspell
+  - nakedret
+  - scopelint
+  - staticcheck
+  - structcheck
+  - stylecheck
+  - typecheck
+  - unconvert
+  - unparam
+  - unused
+  - varcheck
 
 #   don't enable:
 #   - gochecknoglobals
@@ -118,13 +118,13 @@ run:
   #   - mytag
 
   skip-dirs:
-    - src/external_libs
-    - vendor
-    - testdata
+  - src/external_libs
+  - vendor
+  - testdata
 
   skip-files:
-    - ".*_zz_generated\\.deepcopy\\.go$"
-    - ".*zz_generated\\.deepcopy\\.go$"
+  - .*_zz_generated\.deepcopy\.go$
+  - .*zz_generated\.deepcopy\.go$
 
 # output configuration options
 output:
@@ -136,32 +136,32 @@ output:
 
 issues:
   exclude-rules:
-    - path: _test\.go
-      linters:
-        - gocyclo
-        - errcheck
-        - dupl
-        - gosec
-        - gocritic
-    - path: "api/"
-      linters:
-        - dupl
+  - path: _test\.go
+    linters:
+    - gocyclo
+    - errcheck
+    - dupl
+    - gosec
+    - gocritic
+  - path: api/
+    linters:
+    - dupl
 
-    - linters:
-        - lll
-      source: "^//go:generate "
+  - linters:
+    - lll
+    source: '^//go:generate '
 
-    - linters:
-        - lll
-      source: "^//+kubebuilder:"
+  - linters:
+    - lll
+    source: '^//+kubebuilder:'
 
-    - linters:
-        - golint
-      source: "^type .*List struct \\{"
+  - linters:
+    - golint
+    source: ^type .*List struct \{
 
-    - path: v1alpha1
-      linters:
-        - maligned
+  - path: v1alpha1
+    linters:
+    - maligned
 
   exclude-use-default: true
 

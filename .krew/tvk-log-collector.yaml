@@ -9,38 +9,38 @@ spec:
   caveats: |
     Curl and Git neeed to be installed on system for Krew index update to work properly
   platforms:
-    - selector:
-        matchLabels:
-          os: linux
-          arch: amd64
-      uri: https://github.com/trilioData/tvk-plugins/releases/download/LOG_COLLECTOR_VERSION/log-collector_LOG_COLLECTOR_VERSION_linux_amd64.tar.gz
-      sha256: LOG_COLLECTOR_LINUX_TAR_CHECKSUM
-      bin: log-collector
-      files:
-        - from: log-collector
-          to: .
+  - selector:
+      matchLabels:
+        os: linux
+        arch: amd64
+    uri: https://github.com/trilioData/tvk-plugins/releases/download/LOG_COLLECTOR_VERSION/log-collector_LOG_COLLECTOR_VERSION_linux_amd64.tar.gz
+    sha256: LOG_COLLECTOR_LINUX_TAR_CHECKSUM
+    bin: log-collector
+    files:
+    - from: log-collector
+      to: .
 
-    - selector:
-        matchLabels:
-          os: darwin
-          arch: amd64
-      uri: https://github.com/trilioData/tvk-plugins/releases/download/LOG_COLLECTOR_VERSION/log-collector_LOG_COLLECTOR_VERSION_darwin_amd64.tar.gz
-      sha256: LOG_COLLECTOR_DARWIN_TAR_CHECKSUM
-      bin: log-collector
-      files:
-        - from: log-collector
-          to: .
+  - selector:
+      matchLabels:
+        os: darwin
+        arch: amd64
+    uri: https://github.com/trilioData/tvk-plugins/releases/download/LOG_COLLECTOR_VERSION/log-collector_LOG_COLLECTOR_VERSION_darwin_amd64.tar.gz
+    sha256: LOG_COLLECTOR_DARWIN_TAR_CHECKSUM
+    bin: log-collector
+    files:
+    - from: log-collector
+      to: .
 
-    - selector:
-          matchLabels:
-            os: windows
-            arch: amd64
-      uri: https://github.com/trilioData/tvk-plugins/releases/download/LOG_COLLECTOR_VERSION/log-collector_LOG_COLLECTOR_VERSION_windows_amd64.zip
-      sha256: LOG_COLLECTOR_WINDOWS_TAR_CHECKSUM
-      bin: log-collector.exe
-      files:
-        - from: log-collector.exe
-          to: .
+  - selector:
+      matchLabels:
+        os: windows
+        arch: amd64
+    uri: https://github.com/trilioData/tvk-plugins/releases/download/LOG_COLLECTOR_VERSION/log-collector_LOG_COLLECTOR_VERSION_windows_amd64.zip
+    sha256: LOG_COLLECTOR_WINDOWS_TAR_CHECKSUM
+    bin: log-collector.exe
+    files:
+    - from: log-collector.exe
+      to: .
 
   description: |
     tvk-log-collector is a kubectl plugin which collects the information mainly yaml configuration and logs from k8s cluster for
