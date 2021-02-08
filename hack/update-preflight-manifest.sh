@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 if [[ -z "${PREFLIGHT_VERSION}" ]]; then
   echo >&2 "PREFLIGHT_VERSION (required) is not set"
   exit 1

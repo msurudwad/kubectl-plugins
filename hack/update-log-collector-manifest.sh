@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 if [[ -z "${LOG_COLLECTOR_VERSION}" ]]; then
   echo >&2 "LOG_COLLECTOR_VERSION (required) is not set"
   exit 1
