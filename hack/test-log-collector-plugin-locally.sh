@@ -16,7 +16,7 @@ build_dir="dist"
 # shellcheck disable=SC1090
 source "$SRC_ROOT"/hack/get-git-tag.sh
 
-log_collector_manifest="${build_dir}/logCollector.yaml"
+log_collector_manifest="${build_dir}/tvk-log-collector.yaml"
 if [[ ! -f "${log_collector_manifest}" ]]; then
   echo >&2 "Could not find manifest ${log_collector_manifest}."
   exit 1

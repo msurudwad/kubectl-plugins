@@ -27,7 +27,7 @@ jobs:
     - name: Run yamllint
       uses: reviewdog/action-yamllint@v1
       with:
-        fail_on_error: true
+        fail_on_error: false
         reporter: local
         filter_mode: nofilter
 

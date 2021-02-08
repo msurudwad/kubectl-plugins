@@ -27,4 +27,7 @@ tvk_preflight_yaml=$build_dir/$tvk_preflight_yaml
 
 tar_checksum="$(awk '{print $1}' $build_dir/preflight-sha256.txt)"
 sed -i "s/PREFLIGHT_TAR_CHECKSUM/${tar_checksum}/g" $tvk_preflight_yaml
-echo >&2 "Written out preflight.yaml"
+# shellcheck disable=SC2154
+sed -i "s/PREFLIGHT_VERSION/$git_version/g" $tvk_preflight_yaml
+
+echo >&2 "Written out $tvk_preflight_yaml"

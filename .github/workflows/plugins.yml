@@ -30,4 +30,4 @@ jobs:
       run: hack/install-required-utilities.sh
 
     - name: Validate updated plugin manifests
-      run : hack/test-plugin-manifests.sh
+      run: hack/test-plugin-manifests.sh

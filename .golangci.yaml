@@ -25,8 +25,8 @@ linters-settings:
     list-type: blacklist
     include-go-root: false
     packages:
-      # logging is allowed only by logutils.Log, logrus
-      # is allowed to use only in logutils package
+    # logging is allowed only by logutils.Log, logrus
+    # is allowed to use only in logutils package
     - github.com/sirupsen/logrus
     packages-with-error-messages:
       github.com/sirupsen/logrus: logging is allowed only by logutils.Log
@@ -114,17 +114,9 @@ run:
 
   tests: true
 
-  # build-tags:
-  #   - mytag
-
   skip-dirs:
   - src/external_libs
   - vendor
-  - testdata
-
-  skip-files:
-  - .*_zz_generated\.deepcopy\.go$
-  - .*zz_generated\.deepcopy\.go$
 
 # output configuration options
 output:

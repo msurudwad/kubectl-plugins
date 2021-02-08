@@ -28,7 +28,7 @@ log_collector_sha256_file="log-collector-sha256.txt"
 
 log_collector_sha256_URI="$repoURL/releases/download/${LOG_COLLECTOR_VERSION}/$log_collector_sha256_file"
 
-curl -fsSL "$log_collector_sha256_URI" > "$build_dir"/$log_collector_sha256_file
+curl -fsSL "$log_collector_sha256_URI" >"$build_dir"/$log_collector_sha256_file
 
 log_collector_sha256_filePath=$build_dir/$log_collector_sha256_file
 
@@ -45,5 +45,4 @@ sed -i "s/LOG_COLLECTOR_DARWIN_TAR_CHECKSUM/$log_collector_darwin_sha/g" "$log_c
 sed -i "s/LOG_COLLECTOR_WINDOWS_TAR_CHECKSUM/$log_collector_windows_sha/g" "$log_collector_template_manifest"
 
 cp "$build_dir"/$log_collector_yaml "$plugins_dir"/$log_collector_yaml
-echo  >&2 "Updated log-collector plugin manifest '$log_collector_yaml' with 'version=$LOG_COLLECTOR_VERSION' and new sha256sum"
-
+echo >&2 "Updated log-collector plugin manifest '$log_collector_yaml' with 'version=$LOG_COLLECTOR_VERSION' and new sha256sum"

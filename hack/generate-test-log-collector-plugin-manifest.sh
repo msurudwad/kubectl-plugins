@@ -43,4 +43,6 @@ log_collector_tar_archive="log-collector_${git_version}_windows_amd64.zip"
 tar_checksum="$(eval "${checksum_cmd[@]}" "$build_dir/${log_collector_tar_archive}" | awk '{print $1;}')"
 sed -i "s/LOG_COLLECTOR_WINDOWS_TAR_CHECKSUM/${tar_checksum}/g" $tvk_log_collector_yaml
 
-echo >&2 "Written out logCollector.yaml"
+sed -i "s/LOG_COLLECTOR_VERSION/$git_version/g" $tvk_log_collector_yaml
+
+echo >&2 "Written out $tvk_log_collector_yaml"

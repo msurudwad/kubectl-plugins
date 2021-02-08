@@ -12,7 +12,7 @@ cd "$SRC_ROOT"
 
 build_dir="build"
 
-preflight_manifest="${build_dir}/preflight.yaml"
+preflight_manifest="${build_dir}/tvk-preflight.yaml"
 if [[ ! -f "${preflight_manifest}" ]]; then
   echo >&2 "Could not find manifest ${preflight_manifest}."
   exit 1
