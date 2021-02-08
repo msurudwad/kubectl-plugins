@@ -13,7 +13,7 @@ on:
       - '*'
 
 jobs:
-  ci:
+  plugins:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -26,8 +26,8 @@ jobs:
         reporter: local
         filter_mode: nofilter
 
-    - name: Ensure required utilities installed
+    - name: Ensure Required Utilities Installed
       run: hack/install-required-utilities.sh
 
-    - name: Validate updated plugin manifests
+    - name: Validate Updated Plugin Manifests
       run: hack/test-plugin-manifests.sh

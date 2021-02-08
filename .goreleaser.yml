@@ -42,11 +42,6 @@ release:
   # Default is false.
   prerelease: true
 
-  # disable: true
-
-  ids:
-    - none
-
   # You can add extra pre-existing files to the release.
   # The filename on the release will be the last part of the path (base). If
   # another file with the same name exists, the latest one found will be used.
