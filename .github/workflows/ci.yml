@@ -1,5 +1,5 @@
 # CI WorkFlow for kubectl-plugins
-name: CI
+name: CI for Plugins Packages
 on:
   push:
     paths-ignore:
@@ -7,7 +7,7 @@ on:
     branches:
       - 'master'
     tags:
-      - 'v*'
+      - 'v*.*.*'
   pull_request:
     branches:
       - '*'
@@ -37,7 +37,7 @@ jobs:
         version: v1.29
 
     - name: Run Shell lint
-      run: hack/run-lint.sh
+      run: hack/run-shell-lint.sh
 
     - name: Verify code patterns
       run: hack/verify-code-patterns.sh
@@ -66,10 +66,10 @@ jobs:
       run: hack/generate-test-plugin-manifests.sh
 
     - name: Ensure kubectl, helm and krew installed
-      run: hack/ensure-kubectl-helm-krew-installed.sh
+      run: hack/install-required-utilities.sh
 
     - name: Verify installation
-      run: hack/verify-installation.sh
+      run: hack/test-plugins-locally.sh
 
     #- name: Run integration tests
     #  run: hack/run-integration-tests.sh

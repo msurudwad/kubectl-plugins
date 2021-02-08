@@ -1,0 +1,33 @@
+# CI WorkFlow for Plugin Manifests
+name: CI for Plugin Manifests
+on:
+  push:
+    paths:
+      - 'plugins/**'
+    branches:
+      - 'master'
+    tags-ignore:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run yaml lint
+      uses: reviewdog/action-yamllint@v1
+      with:
+        fail_on_error: true
+        reporter: local
+        filter_mode: nofilter
+
+    - name: Ensure required utilities installed
+      run: hack/install-required-utilities.sh
+
+    - name: Validate updated plugin manifests
+      run : hack/test-plugin-manifests.sh
