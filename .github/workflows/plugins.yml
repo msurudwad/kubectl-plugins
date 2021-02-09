@@ -1,19 +1,25 @@
-# CI WorkFlow for Plugin Manifests
+# CI WorkFlow for testing Plugin Manifests
 name: CI for Plugin Manifests
 on:
   push:
-    paths:
-      - 'plugins/**'
     branches:
-      - 'master'
+      - 'main'
     tags-ignore:
       - '*'
+    paths:
+      - 'plugins/**'
+      - 'hack/test-plugin-manifests.sh'
+      - '.github/workflows/plugins.yml'
   pull_request:
     branches:
-      - '*'
+      - 'main'
+    paths:
+      - 'plugins/**'
+      - 'hack/test-plugin-manifests.sh'
+      - '.github/workflows/plugins.yml'
 
 jobs:
-  ci:
+  plugins:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -26,8 +32,8 @@ jobs:
         reporter: local
         filter_mode: nofilter
 
-    - name: Ensure required utilities installed
+    - name: Ensure Required Utilities Installed
       run: hack/install-required-utilities.sh
 
-    - name: Validate updated plugin manifests
-      run : hack/test-plugin-manifests.sh
+    - name: Validate Updated Plugin Manifests
+      run: hack/test-plugin-manifests.sh

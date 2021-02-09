@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 if [[ -z "${PREFLIGHT_VERSION}" ]]; then
   echo >&2 "PREFLIGHT_VERSION (required) is not set"
   exit 1
@@ -26,7 +28,7 @@ preflightSha256File="preflight-sha256.txt"
 
 preflightSha256URI="$repoURL/releases/download/${PREFLIGHT_VERSION}/$preflightSha256File"
 
-curl -fsSL "$preflightSha256URI" > "$build_dir"/$preflightSha256File
+curl -fsSL "$preflightSha256URI" >"$build_dir"/$preflightSha256File
 
 preflightSha256FilePath=$build_dir/$preflightSha256File
 
@@ -36,4 +38,4 @@ sed -i "s/PREFLIGHT_VERSION/$PREFLIGHT_VERSION/g" "$preflight_template_manifest"
 sed -i "s/PREFLIGHT_TAR_CHECKSUM/$preflight_sha/g" "$preflight_template_manifest"
 
 cp "$build_dir"/$preflight_yaml "$plugins_dir"/$preflight_yaml
-echo  >&2 "Updated preflight plugin manifest '$preflight_yaml' with 'version=$PREFLIGHT_VERSION' and new sha256sum"
+echo >&2 "Updated preflight plugin manifest '$preflight_yaml' with 'version=$PREFLIGHT_VERSION' and new sha256sum"

@@ -4,16 +4,13 @@ set -euo pipefail
 
 SRC_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
 
-# install plugin validate-krew-manifest, if not present
-if hash kubectl validate-krew-manifest 2>/dev/null; then
-    echo >&2 "using validate-krew-manifest plugin from the host system and not reinstalling"
-  else
-    go get sigs.k8s.io/krew/cmd/validate-krew-manifest@master
-fi
+# install plugin validate-krew-manifest
+export GOBIN=$HOME/bin
+go get sigs.k8s.io/krew/cmd/validate-krew-manifest@master
+unset GOBIN
 
 # validate plugin manifests
-for entry in "$SRC_ROOT"/plugins/*
-do
-  validate-krew-manifest -manifest "$entry"
-  echo  >&2 "Successfully validated plugin manifest $entry"
+for file in "$SRC_ROOT"/plugins/*; do
+  "$HOME"/bin/validate-krew-manifest -manifest "$file"
+  echo >&2 "Successfully validated plugin manifest $file"
 done
