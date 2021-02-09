@@ -7,7 +7,7 @@ spec:
   shortDescription: TVK application preflight check for k8s cluster
   version: v1.0.0
   caveats: |
-    Curl and Git neeed to be installed on system for Krew index update to work properly
+    Curl and Git neeed to be installed on system for Krew index update to work properly.
   platforms:
   - selector:
       matchExpressions:

@@ -1,4 +1,4 @@
-# CI WorkFlow for kubectl-plugins
+# CI WorkFlow for build, test and release of Plugin Packages
 name: CI for Plugins Packages
 on:
   push:

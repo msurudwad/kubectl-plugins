@@ -1,4 +1,4 @@
-# CI WorkFlow for Plugin Manifests
+# CI WorkFlow for testing Plugin Manifests
 name: CI for Plugin Manifests
 on:
   push:
