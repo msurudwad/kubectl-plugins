@@ -1,13 +1,28 @@
 # CI WorkFlow for build, test and release of Plugin Packages
-name: CI for Plugins Packages
+name: CI for Plugin Packages
 on:
   push:
-    paths-ignore:
-      - 'plugins/**'
     branches:
-      - '*'
+      - 'main'
     tags:
       - 'v*.*.*'
+    paths-ignore:
+      - 'plugins/**'
+      - 'hack/test-plugin-manifests.sh'
+      - 'hack/update-plugin-manifests.sh'
+      - 'hack/update-preflight-manifest.sh'
+      - 'hack/update-log-collector-manifest.sh'
+      - '.github/workflows/plugins.yml'
+  pull_request:
+    branches:
+      - '*'
+    paths-ignore:
+      - 'plugins/**'
+      - 'hack/test-plugin-manifests.sh'
+      - 'hack/update-plugin-manifests.sh'
+      - 'hack/update-preflight-manifest.sh'
+      - 'hack/update-log-collector-manifest.sh'
+      - '.github/workflows/plugins.yml'
 
 jobs:
   pre-build:

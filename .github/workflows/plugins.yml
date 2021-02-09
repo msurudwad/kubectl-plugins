@@ -2,12 +2,21 @@
 name: CI for Plugin Manifests
 on:
   push:
-    paths:
-      - 'plugins/**'
     branches:
-      - '*'
+      - 'main'
     tags-ignore:
       - '*'
+    paths:
+      - 'plugins/**'
+      - 'hack/test-plugin-manifests.sh'
+      - '.github/workflows/plugins.yml'
+  pull_request:
+    branches:
+      - '*'
+    paths:
+      - 'plugins/**'
+      - 'hack/test-plugin-manifests.sh'
+      - '.github/workflows/plugins.yml'
 
 jobs:
   plugins:
