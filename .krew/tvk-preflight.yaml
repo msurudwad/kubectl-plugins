@@ -24,7 +24,7 @@ spec:
       to: .
 
   description: |
-    preflight is a kubectl plugin which checks whether all the pre-requisites are met before installing Triliovault
+    tvk-preflight is a kubectl plugin which checks whether all the pre-requisites are met before installing Triliovault
     for Kubernetes(TVK) application in a Kubernetes cluster.
 
     > Check available flags for preflight plugin with :-
@@ -36,4 +36,4 @@ spec:
 
     > Usage :-
 
-    kubectl preflight --storageclass my-hostpath-sc --snapshotclass default-snapclass --kubeconfig /home/usr/kubeconfig
+    kubectl tvk-preflight --storageclass my-hostpath-sc --snapshotclass default-snapclass --kubeconfig /home/usr/kubeconfig

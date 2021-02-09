@@ -16,7 +16,7 @@ spec:
         values:
         - darwin
         - linux
-    uri: https://github.com/msurudwad/kubectl-plugins/releases/download/v1.0.0/preflight.tar.gz
+    uri: https://github.com/trilioData/tvk-plugins/releases/download/v1.0.0/preflight.tar.gz
     sha256: fb72b6c903b4b9abe8e429833a652ee3280883236ff1f22d5ff51beb59ea6045
     bin: preflight
     files:
