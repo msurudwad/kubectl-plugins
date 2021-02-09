@@ -12,7 +12,7 @@ on:
       - '.github/workflows/plugins.yml'
   pull_request:
     branches:
-      - '*'
+      - 'main'
     paths:
       - 'plugins/**'
       - 'hack/test-plugin-manifests.sh'
