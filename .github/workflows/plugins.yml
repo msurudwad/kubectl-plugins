@@ -1,17 +1,6 @@
 # CI WorkFlow for testing Plugin Manifests
 name: CI for Plugin Manifests
 on:
-  push:
-    # TODO: TBD to run on main
-    branches:
-      - 'main'
-    tags-ignore:
-      - '*'
-    paths:
-      - 'plugins/**'
-      - 'hack/test-plugin-manifests.sh'
-      - 'hack/install-required-utilities.sh'
-      - '.github/workflows/plugins.yml'
   pull_request:
     branches:
       - 'main'
@@ -22,8 +11,7 @@ on:
       - '.github/workflows/plugins.yml'
 
 jobs:
-  # TODO: TBD check if new job for shell script needed.
-  plugins:
+  validate-plugin-manifests:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
