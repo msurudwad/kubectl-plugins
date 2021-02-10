@@ -1,7 +1,9 @@
 # CI WorkFlow for build, test and release of Plugin Packages
-name: CI for Plugin Packages
+name: Plugin Packages CI
 on:
   push:
+    branches:
+      - '*'
     tags:
       - 'v*.*.*'
   pull_request:
@@ -9,13 +11,15 @@ on:
       - '*'
     paths-ignore:
       - 'plugins/**'
-      - 'hack/test-plugin-manifests.sh'
+      - 'hack/validate-plugin-manifests.sh'
       - 'hack/update-plugin-manifests.sh'
       - 'hack/update-preflight-manifest.sh'
       - 'hack/update-log-collector-manifest.sh'
       - '.github/workflows/plugins.yml'
 
 jobs:
+  # pre-build job runs yaml lint, shell lint, golangci-lint and detects file changes to sets job variables which will be used to
+  # decide whether to run subsequent jobs(build_test_preflight and build_test_log-collector)
   pre-build:
     runs-on: ubuntu-latest
     outputs:
@@ -61,11 +65,13 @@ jobs:
               - 'tools/log_collector/**'
               - '.goreleaser.yml'
 
-  preflight:
+  # build_test_preflight job build preflight packages, runs integration tests and tests packages for plugin creation(install, uninstall)
+  # upload preflight packages to github artifacts if tags('/ref/tags') are pushed
+  build_test_preflight:
     runs-on: ubuntu-latest
     needs: pre-build
-    # for 'ref/tags/', 'needs.pre-build.outputs.preflight=false' so to run preflight job on tags as well added
-    # startsWith(github.ref, 'refs/tags/') condition
+    # for tags('ref/tags/'), 'needs.pre-build.outputs.preflight' will be 'false' so to run 'build_test_preflight' job on tags as well,
+    # added condition 'startsWith(github.ref, 'refs/tags/')'
     if: (needs.pre-build.outputs.preflight == 'true') || startsWith(github.ref, 'refs/tags/')
     steps:
     - name: Checkout
@@ -94,11 +100,12 @@ jobs:
           build/preflight.tar.gz
           build/preflight-sha256.txt
 
-  log-collector:
+  # build_test_log-collector job builds log-collector packages, runs integration tests and tests packages for plugin creation(install, uninstall)
+  build_test_log-collector:
     runs-on: ubuntu-latest
     needs: pre-build
-    # for 'ref/tags/', 'needs.pre-build.outputs.preflight=false' so to run preflight job on tags as well added
-    # startsWith(github.ref, 'refs/tags/') condition
+    # for tags('ref/tags/'), 'needs.pre-build.outputs.logCollector' is 'false' so to run 'build_test_log-collector' job on tags as well,
+    # added condition 'startsWith(github.ref, 'refs/tags/')'
     if: (needs.pre-build.outputs.logCollector == 'true') || startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout
@@ -126,18 +133,47 @@ jobs:
           hack/generate-test-log-collector-plugin-manifest.sh
           hack/test-log-collector-plugin-locally.sh
 
+  # pre-release job determines whether to create release or not and sets job variables which will be used to decide
+  # what packages(preflight or log-collector or both) should be included in release
+  pre-release:
+    runs-on: ubuntu-latest
+    needs: [preflight, log-collector]
+    if: startsWith(github.ref, 'refs/tags/')
+    outputs:
+      create_release: ${{ steps.detect_changes.outputs.create_release }}
+      release_preflight: ${{ steps.detect_changes.outputs.release_preflight }}
+      release_log_collector: ${{ steps.detect_changes.outputs.release_log_collector }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Determine File Changes for Release
+        id: detect_changes
+        run: hack/check-git-diff-between-tags.sh
+
+  # release job creates and uploads release on github. Also, decides which package to include in release based on conditional constructs
   release:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: [preflight, log-collector]
+    needs: pre-release
+    if: needs.pre-release.outputs.create_release == 'true' && startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/download-artifact@v2
+      - name: Download Preflight Packages from Artifact
+        uses: actions/download-artifact@v2
+        if: needs.pre-release.outputs.release_preflight == 'true'
         with:
           name: preflight
           path: build
+
+      - name: Update GoReleaser Config for Release
+        run: hack/update-goreleaser-yaml.sh
+        env:
+          release_preflight: ${{needs.pre-release.outputs.release_preflight}}
+          release_log_collector: ${{needs.pre-release.outputs.release_log_collector}}
 
       - name: Setup Go
         uses: actions/setup-go@v2
@@ -148,6 +184,6 @@ jobs:
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --rm-dist
+          args: release --rm-dist --skip-validate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
