@@ -9,6 +9,7 @@ on:
     paths:
       - 'plugins/**'
       - 'hack/test-plugin-manifests.sh'
+      - 'hack/install-required-utilities.sh'
       - '.github/workflows/plugins.yml'
   pull_request:
     branches:
@@ -16,6 +17,7 @@ on:
     paths:
       - 'plugins/**'
       - 'hack/test-plugin-manifests.sh'
+      - 'hack/install-required-utilities.sh'
       - '.github/workflows/plugins.yml'
 
 jobs:
