@@ -1,7 +1,4 @@
-before:
-  hooks:
-    - go mod download
-
+# goreleaser build and release config
 builds:
 - id: log-collector
   main: ./cmd/
@@ -19,11 +16,6 @@ archives:
 - id: log-collector-archive
   name_template: |-
     log-collector_{{ .Tag }}_{{ .Os }}_{{ .Arch -}}
-    {{- with .Arm -}}
-      {{- if (eq . "6") -}}hf
-      {{- else -}}v{{- . -}}
-      {{- end -}}
-    {{- end -}}
   builds:
     - log-collector
   format_overrides:
@@ -36,6 +28,7 @@ checksum:
   algorithm: sha256
 
 release:
+  # TODO: change to false after release > TBD
   # If set to auto, will mark the release as not ready for production
   # in case there is an indicator for this in the tag e.g. v1.0.0-rc1
   # If set to true, will mark the release as not ready for production.
