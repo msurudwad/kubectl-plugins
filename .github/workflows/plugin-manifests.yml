@@ -8,7 +8,7 @@ on:
       - 'plugins/**'
       - 'hack/validate-plugin-manifests.sh'
       - 'hack/install-required-utilities.sh'
-      - '.github/workflows/plugins.yml'
+      - '.github/workflows/plugin-manifests.yml'
 
 jobs:
   # validate-plugin-manifests job validates plugin manifests which are under 'plugins' dir

@@ -37,7 +37,7 @@ Params:
 
 take_input() {
   if [[ -z "${1}" ]]; then
-    echo "Error: Storage class and volume snapshot class params are needed to run pre flight checks!"
+    echo "Error: --storageclass and --snapshotclass params are needed to run pre flight checks!"
     print_help
     exit 1
   fi
@@ -81,7 +81,7 @@ take_input() {
     esac
   done
   if [[ -z "${STORAGE_CLASS}" || -z "${SNAPSHOT_CLASS}" ]]; then
-    echo "Error: Storage class and volume snapshot class, both params are needed to run pre flight checks!"
+    echo "Error: --storageclass and --snapshotclass, both params are needed to run pre flight checks!"
     print_help
     exit 1
   fi
