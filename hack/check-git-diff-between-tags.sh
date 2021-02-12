@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-SRC_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
-
 # shellcheck disable=SC2046
 # shellcheck disable=SC2006
 current_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --max-count=1))
@@ -16,8 +14,8 @@ git describe --exact-match --tags --match "$current_tag"
 previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
 
 # use hard coded values if required
-#current_tag=v0.0.5-dev
-#previous_tag=v0.0.4-dev
+#current_tag=v0.0.6-main
+#previous_tag=v0.0.5-dev
 
 echo "current_tag=$current_tag and previous_tag=$previous_tag"
 
@@ -26,10 +24,10 @@ echo "checking paths of modified files-"
 preflight_changed=false
 log_collector_changed=false
 
-cmd_dir=$SRC_ROOT/cmd
-tools_dir=$SRC_ROOT/tools
-preflight_dir="$tools_dir/preflight"
-log_collector_dir="$tools_dir/log_collector"
+cmd_dir=cmd
+tools_dir=tools
+preflight_dir=$tools_dir/preflight
+log_collector_dir=$tools_dir/log_collector
 
 # shellcheck disable=SC2086
 git diff --name-only $previous_tag $current_tag $tools_dir >files.txt
