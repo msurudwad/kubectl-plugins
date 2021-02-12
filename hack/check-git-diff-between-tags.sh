@@ -27,7 +27,7 @@ log_collector_changed=false
 cmd_dir=cmd
 tools_dir=tools
 preflight_dir=$tools_dir/preflight
-log_collector_dir=$tools_dir/log_collector
+log_collector_dir=$tools_dir/log-collector
 
 # shellcheck disable=SC2086
 git diff --name-only $previous_tag $current_tag $tools_dir >files.txt

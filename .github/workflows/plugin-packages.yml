@@ -61,7 +61,7 @@ jobs:
               - 'cmd/**'
               - 'hack/**'
               - '.krew/tvk-log-collector.yaml'
-              - 'tools/log_collector/**'
+              - 'tools/log-collector/**'
               - '.goreleaser.yml'
 
   # build_test_preflight job build preflight packages, runs integration tests and tests packages for plugin creation(install, uninstall)
