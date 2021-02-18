@@ -33,10 +33,6 @@ cleanup() {
   exit ${rc}
 }
 
-get_kubeconfig() {
-  gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE" --project "$PROJECT_ID"
-}
-
 prepare_namespaces() {
   # shellcheck disable=SC2154
   install_ns="pre-${build_id}"
@@ -88,19 +84,11 @@ helm_install() {
 
 run_tests() {
   components=("$@")
-  # call ginkgo here
-  export GOBIN=$HOME/bin
-  go get -u github.com/onsi/ginkgo/ginkgo
-  go mod tidy
-  go mod vendor
-  unset GOBIN
-
-  "$HOME"/bin/ginkgo -r -keepGoing "${components[@]}"
+  GO111MODULE=off go get -u github.com/onsi/ginkgo/ginkgo
+  ginkgo -r -keepGoing "${components[@]}"
 }
 
 trap "cleanup" EXIT
-
-get_kubeconfig
 
 prepare_namespaces
 helm_install
