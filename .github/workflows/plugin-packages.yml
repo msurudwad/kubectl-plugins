@@ -99,6 +99,12 @@ jobs:
     - name: Build Preflight Package
       run: make build-preflight
 
+    - name: Setup Go
+      if: needs.pre-build.outputs.testPreflight == 'true'
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+
     - name: Authenticate and Connect to GKE cluster
       if: needs.pre-build.outputs.testLogCollector == 'true'
       uses: google-github-actions/get-gke-credentials@v0.2.1
@@ -127,7 +133,6 @@ jobs:
         path: |
           build/preflight.tar.gz
           build/preflight-sha256.txt
-
 
   # build_test_log-collector job builds log-collector packages, runs integration tests and tests packages for plugin creation(install, uninstall)
   build_test_log-collector:

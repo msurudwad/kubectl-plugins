@@ -27,10 +27,10 @@ jobs:
         filter_mode: nofilter
 
     - name: Run Shell lint
-      run: hack/run-shell-lint.sh
+      run: make shell-lint
 
     - name: Ensure Required Utilities Installed
-      run: hack/install-required-utilities.sh
+      run: make install-required-utilities
 
     - name: Validate Updated Plugin Manifests
-      run: hack/validate-plugin-manifests.sh
+      run: make validate-plugin-manifests

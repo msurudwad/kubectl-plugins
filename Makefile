@@ -35,9 +35,11 @@ run-log-collector:
 	go run ./cmd/main.go
 
 install-required-utilities:
+	./hack/install-required-utilities.sh
+
+install: install-required-utilities
 	sudo apt-get install yamllint
 	curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
-	./hack/install-required-utilities.sh
 
 build-preflight:
 	./hack/build-preflight-artifacts.sh
