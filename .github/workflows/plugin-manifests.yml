@@ -26,6 +26,9 @@ jobs:
         reporter: local
         filter_mode: nofilter
 
+    - name: Run Shell lint
+      run: hack/run-shell-lint.sh
+
     - name: Ensure Required Utilities Installed
       run: hack/install-required-utilities.sh
 

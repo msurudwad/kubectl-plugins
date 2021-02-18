@@ -4,7 +4,8 @@ set -euo pipefail
 
 get_git_tag() {
   # shellcheck disable=SC2046
-  git_describe="$(git describe --tags --always)"
+  # shellcheck disable=SC2006
+  git_describe="$(git describe --abbrev=0 --always --tags $(git rev-list --tags --max-count=1))"
   if [[ ! "${git_describe}" =~ v.* ]]; then
     # if tag cannot be inferred, still provide a valid version field for plugin yamls
     git_describe="v0.0.0"

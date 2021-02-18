@@ -28,7 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       preflight: ${{ steps.filter.outputs.preflight }}
+      testPreflight: ${{ steps.filter.outputs.testPreflight }}
       logCollector: ${{ steps.filter.outputs.logCollector }}
+      testLogCollector: ${{ steps.filter.outputs.testLogCollector }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -46,10 +48,10 @@ jobs:
           version: v1.30
 
       - name: Run Shell lint
-        run: hack/run-shell-lint.sh
+        run: make shell-lint
 
       - name: Verify code patterns
-        run: hack/verify-code-patterns.sh
+        run: make verify-code-patterns
 
       - name: Detect File Changes
         uses: dorny/paths-filter@v2
@@ -57,6 +59,7 @@ jobs:
         with:
           filters: |
             preflight:
+              - 'Makefile'
               - 'hack/**'
               - '.krew/tvk-preflight.yaml'
               - 'tools/preflight/**'
@@ -64,11 +67,20 @@ jobs:
               - 'tests/preflight/**'
               - 'tests/common/**'
             logCollector:
+              - 'Makefile'
               - 'cmd/**'
               - 'hack/**'
               - '.krew/tvk-log-collector.yaml'
               - 'tools/log-collector/**'
               - '.goreleaser.yml'
+              - 'tests/log-collector/**'
+              - 'tests/common/**'
+            testPreflight:
+              - 'tools/preflight/**'
+              - 'tests/preflight/**'
+            testLogCollector:
+              - 'cmd/**'
+              - 'tools/log-collector/**'
               - 'tests/log-collector/**'
               - 'tests/common/**'
 
@@ -85,18 +97,27 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build Preflight Package
-      run: hack/build-preflight-artifacts.sh
+      run: make build-preflight
 
-      #- name: Run integration tests
-      #  run: hack/run-integration-tests.sh
+    - name: Authenticate and Connect to GKE cluster
+      if: needs.pre-build.outputs.testLogCollector == 'true'
+      uses: google-github-actions/get-gke-credentials@v0.2.1
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.GKE_SA_KEY }}
+
+    - name: Run Preflight Integration Tests
+      if: needs.pre-build.outputs.testPreflight == 'true'
+      run: |
+        GO111MODULE=off go get -u github.com/onsi/ginkgo/ginkgo
+        ginkgo -r -keepGoing tests/preflight/
 
     - name: Ensure Required Utilities Installed
-      run: hack/install-required-utilities.sh
+      run: make install-required-utilities
 
     - name: Test Preflight Plugin Locally
-      run: |
-        hack/generate-test-preflight-plugin-manifest.sh
-        hack/test-preflight-plugin-locally.sh
+      run: make test-preflight-plugin-locally
 
     - name: Upload Preflight Plugin Packges to github artifact
       uses: actions/upload-artifact@v2
@@ -131,6 +152,7 @@ jobs:
           args: release --snapshot --skip-publish --rm-dist
 
       - name: Setup Pre-requisuites of TVK License Creation
+        if: needs.pre-build.outputs.testLogCollector == 'true'
         run: |
           sudo apt-get install libssl-dev swig python3-dev gcc python3-setuptools
           pip3 install M2Crypto==0.35.2
@@ -141,6 +163,7 @@ jobs:
           TRILIODATA_PUB: ${{secrets.TRILIODATA_PUB}}
 
       - name: Authenticate and Connect to GKE cluster
+        if: needs.pre-build.outputs.testLogCollector == 'true'
         uses: google-github-actions/get-gke-credentials@v0.2.1
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
@@ -148,18 +171,17 @@ jobs:
           credentials: ${{ secrets.GKE_SA_KEY }}
 
       - name: Run Log-collector Integration Tests
+        if: needs.pre-build.outputs.testLogCollector == 'true'
         run: hack/run-integration-tests.sh tests/log-collector/
         env:
           job_name: log-collector
           build_id: logcollector-${{ github.run_id }}
 
       - name: Ensure Required Utilities Installed for Plugin Testing
-        run: hack/install-required-utilities.sh
+        run: make install-required-utilities
 
       - name: Test Log-Collector Plugin Locally
-        run: |
-          hack/generate-test-log-collector-plugin-manifest.sh
-          hack/test-log-collector-plugin-locally.sh
+        run: make test-log-collector-plugin-locally
 
   # pre-release job determines whether to create release or not and sets job variables which will be used to decide
   # what packages(preflight or log-collector or both) should be included in release

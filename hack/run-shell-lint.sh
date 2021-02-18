@@ -24,4 +24,4 @@ fi
 # run shell lint
 find "${SRC_ROOT}" -type f -name "*.sh" -not -path "*/vendor/*" -exec "shellcheck" {} +
 
-echo >&2 "No issues detected!"
+echo >&2 "shell-lint: No issues detected!"
