@@ -74,4 +74,5 @@ update-log-collector-manifest:
 
 update-plugin-manifests: update-preflight-manifest update-log-collector-manifest
 
+
 .PHONY: clean fmt vet go-lint shell-lint go-lint-fix yaml-lint go-test test coverage build run-log-collector

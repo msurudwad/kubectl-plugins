@@ -162,10 +162,8 @@ jobs:
           sudo apt-get install libssl-dev swig python3-dev gcc python3-setuptools
           pip3 install M2Crypto==0.35.2
           printf "%s" "$TRILIODATA" > triliodata
-          printf "%s" "$TRILIODATA_PUB" > triliodata.pub
         env:
           TRILIODATA: ${{secrets.TRILIODATA}}
-          TRILIODATA_PUB: ${{secrets.TRILIODATA_PUB}}
 
       - name: Authenticate and Connect to GKE cluster
         if: needs.pre-build.outputs.testLogCollector == 'true'

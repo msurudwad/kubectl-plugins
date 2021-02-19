@@ -8,7 +8,6 @@ import (
 )
 
 var _ = Describe("Add:", func() {
-
 	Context("when summand is negative", func() {
 		It("returns an err", func() {
 			_, err := Add(-1, -1)
