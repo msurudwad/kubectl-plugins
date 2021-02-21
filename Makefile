@@ -23,6 +23,8 @@ go-lint:
 go-lint-fix:
 	golangci-lint run --fix
 
+lint: yaml-lint shell-lint go-lint
+
 go-test:
 	GOFLAGS=-mod=vendor ginkgo -v -r -keepGoing ./tests/ -coverprofile coverage.out
 
@@ -38,13 +40,14 @@ install-required-utilities:
 	./hack/install-required-utilities.sh
 
 install: install-required-utilities
-	sudo apt-get install yamllint
+	sudo apt-get install curl yamllint
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.30.0
 	curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
 
 build-preflight:
 	./hack/build-preflight-artifacts.sh
 
-build: build-log-collector build-preflight
+build: build-preflight build-log-collector
 
 test-preflight-plugin-locally:
 	./hack/generate-test-preflight-plugin-manifest.sh
@@ -59,6 +62,8 @@ test-preflight: clean build-preflight test-preflight-plugin-locally
 test-log-collector: clean build-log-collector test-log-collector-plugin-locally
 
 test-plugins-locally: test-preflight-plugin-locally test-log-collector-plugin-locally
+
+test-plugins-packages: test-preflight test-log-collector
 
 validate-plugin-manifests:
 	./hack/validate-plugin-manifests.sh
