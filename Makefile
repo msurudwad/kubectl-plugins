@@ -1,6 +1,7 @@
 PREFLIGHT_BUILD_DIR ?= build
 LOG_COLLECTOR_BUILD_DIR ?= dist
 
+
 clean:
 	go clean
 	rm -rf $(LOG_COLLECTOR_BUILD_DIR) $(PREFLIGHT_BUILD_DIR)
