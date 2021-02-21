@@ -4,7 +4,7 @@ set -euo pipefail
 
 # shellcheck disable=SC2046
 # shellcheck disable=SC2006
-current_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --max-count=1))
+current_tag=$(git describe --abbrev=0 --tags)
 
 # validate if current tag directly references the supplied commit
 git describe --exact-match --tags --match "$current_tag"
