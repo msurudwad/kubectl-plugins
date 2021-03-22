@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+set -x
 
 # shellcheck disable=SC2046
 # shellcheck disable=SC2006
-current_tag=$(git describe --abbrev=0 --tags)
+current_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --max-count=1))
 
 # validate if current tag directly references the supplied commit
 git describe --exact-match --tags --match "$current_tag"
 
 # shellcheck disable=SC2046
 # shellcheck disable=SC2006
-previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))
-
-# use hard coded values if required
-#current_tag=v0.0.6-main
-#previous_tag=v0.0.5-dev
+previous_tag=$(git describe --tags --match=v[0-9].[0-9].[0-9] --exclude="${current_tag}" --exclude=v*-alpha* --exclude=v*-beta* --exclude=v*-rc* --abbrev=0)
+#previous_tag=$(git describe --abbrev=0 --tags)
 
 echo "current_tag=$current_tag and previous_tag=$previous_tag"
 
