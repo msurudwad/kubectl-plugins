@@ -35,24 +35,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run yamllint
-        uses: reviewdog/action-yamllint@v1
-        with:
-          fail_on_error: true
-          reporter: local
-          filter_mode: nofilter
-
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.30
-
-      - name: Run Shell lint
-        run: make shell-lint
-
-      - name: Verify code patterns
-        run: make verify-code-patterns
-
       - name: Detect File Changes
         uses: dorny/paths-filter@v2
         id: filter
@@ -91,7 +73,6 @@ jobs:
     needs: pre-build
     # for tags('ref/tags/'), 'needs.pre-build.outputs.preflight' will be 'false' so to run 'build_test_preflight' job on tags as well,
     # added condition 'startsWith(github.ref, 'refs/tags/')'
-    if: (needs.pre-build.outputs.preflight == 'true') || startsWith(github.ref, 'refs/tags/')
     steps:
     - name: Checkout
       uses: actions/checkout@v2
