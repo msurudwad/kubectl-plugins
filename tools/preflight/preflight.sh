@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Purpose: Helper script for running pre-flight checks before installing K8s-Triliovault application.
-
 # COLOUR CONSTANTS
 GREEN='\033[0;32m'
 GREEN_BOLD='\033[0;32m\e[1m'
