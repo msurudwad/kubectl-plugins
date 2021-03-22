@@ -19,7 +19,7 @@ on:
 
 env:
   GKE_CLUSTER: ci-cluster
-  GKE_ZONE: us-east1-b
+  GKE_ZONE: us-east1-c
 
 jobs:
   # pre-build job runs yaml lint, shell lint, golangci-lint and detects file changes to sets job variables which will be used to
@@ -100,13 +100,11 @@ jobs:
       run: make build-preflight
 
     - name: Setup Go
-      if: needs.pre-build.outputs.testPreflight == 'true'
       uses: actions/setup-go@v2
       with:
         go-version: 1.15
 
     - name: Authenticate and Connect to GKE cluster
-      if: needs.pre-build.outputs.testLogCollector == 'true'
       uses: google-github-actions/get-gke-credentials@v0.2.1
       with:
         cluster_name: ${{ env.GKE_CLUSTER }}
